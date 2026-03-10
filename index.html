@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title> Start Page </title>
+    <link rel="stylesheet" href="CSS/startpage.css">
+</head>
+<body>
+    <h1> Please Select Which City You Are In: </h1>
+
+    <div class="dropdown">
+        <button class="dropdown-btn">Choose city ▾</button>
+        <div class="dropdown-content" id="cityDropdown">
+            <a href="#">North End</a>
+            <a href="#">South End</a>
+            <a href="#">Charlestown</a>
+            <a href="#">Allston</a>
+            <a href="#">Brighton</a>
+            <a href="#">Fenway</a>
+            <a href="#">Back Bay</a>
+            <a href="#">Seaport</a>
+            <a href="#">Beacon Hill</a>
+            <a href="#">Chinatown</a>
+        </div>
+    </div>
+
+    <h1> Where Do You Wish To Go? </h1>
+
+    <div class="dropdown">
+        <button class="dropdown-btn">Choose destination ▾</button>
+        <div class="dropdown-content" id="destDropdown">
+            <a href="#">North Station</a>
+            <a href="#">South Station</a>
+            <a href="#">Logan Airport</a>
+            <a href="#">Museum of Fine Arts</a>
+            <a href="#">Harvard Square</a>
+            <a href="#">Fenway Park</a>
+            <a href="#">Boston Common</a>
+            <a href="#">Newbury Street</a>
+        </div>
+    </div>
+
+    <script>
+        let selectedCity = "";
+        let selectedDestination = "";
+
+        // Generic dropdown handler for any .dropdown element
+        document.querySelectorAll('.dropdown').forEach(function(drop) {
+            const btn = drop.querySelector('.dropdown-btn');
+            const content = drop.querySelector('.dropdown-content');
+
+            btn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                // close other dropdowns
+                document.querySelectorAll('.dropdown-content.show').forEach(function(c) {
+                    if (c !== content) c.classList.remove('show');
+                });
+                content.classList.toggle('show');
+            });
+
+            content.querySelectorAll('a').forEach(function(link) {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const text = this.textContent.trim();
+                    btn.textContent = text + ' ▾';
+                    content.classList.remove('show');
+
+                    // Track which dropdown was selected
+                    if (content.id === "cityDropdown") {
+                        selectedCity = text;
+                    } else if (content.id === "destDropdown") {
+                        selectedDestination = text;
+                    }
+                });
+            });
+        });
+
+        // Close all dropdowns when clicking outside
+        window.addEventListener('click', function() {
+            document.querySelectorAll('.dropdown-content.show').forEach(function(c) {
+                c.classList.remove('show');
+            });
+        });
+    </script>
+
+    <h1> Let's Go! </h1>
+    <button class="continue-box" id="continueBtn">Continue!</button>
+
+    <script>
+        // Continue button logic
+        document.getElementById("continueBtn").addEventListener("click", function() {
+            if (selectedCity && selectedDestination) {
+                const url = `continuepage.html?city=${encodeURIComponent(selectedCity)}&dest=${encodeURIComponent(selectedDestination)}`;
+                window.location.href = url;
+            } else {
+                alert("Please select both a city and a destination.");
+            }
+        });
+    </script>
+</body>
+</html>
